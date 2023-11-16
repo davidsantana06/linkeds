@@ -33,6 +33,7 @@ def test_bounded_stack(bounded_stack: BoundedStack) -> None:
     assert bounded_stack.is_full() is True
 
     for i in range(bounded_stack.size):
+        assert bounded_stack.peek() == PROCESSES[-(i + 1)]
         assert bounded_stack.pop() == PROCESSES[-(i + 1)]
 
     assert bounded_stack.is_empty() is True
@@ -42,6 +43,7 @@ def test_dynamic_stack(dynamic_stack: DynamicStack) -> None:
     assert dynamic_stack.is_empty() is False
 
     for i in range(dynamic_stack.size):
+        assert dynamic_stack.peek() == PROCESSES[-(i + 1)]
         assert dynamic_stack.pop() == PROCESSES[-(i + 1)]
 
     assert dynamic_stack.is_empty() is True
