@@ -24,13 +24,23 @@ class Stack(ABC):
     def is_empty(self) -> bool:
         return self._size == 0
 
+    def _push(self, data: object) -> None:
+        self._top = SingleNode(data, self._top)
+        self._size += 1
+
     @abstractmethod
     def push(self, data: object) -> None:
         ...
 
-    @abstractmethod
     def pop(self) -> object:
-        ...
+        if self.is_empty():
+            raise EmptyStackException()
+        else:
+            data = self._top.data
+            self._top = self._top.next
+            self._size -= 1
+
+            return data
 
     def peek(self) -> object:
         return self._top.data if (self._top is not None) else self._top
@@ -48,31 +58,9 @@ class BoundedStack(Stack):
         if self.is_full():
             raise FullStackException()
         else:
-            self._top = SingleNode(data, self._top)
-            self._size += 1
-
-    def pop(self) -> object:
-        if self.is_empty():
-            raise EmptyStackException()
-        else:
-            data = self._top.data
-            self._top = self._top.next
-            self._size -= 1
-
-            return data
+            self._push(data)
 
 
 class DynamicStack(Stack):
     def push(self, data: object) -> None:
-        self._top = SingleNode(data, self._top)
-        self._size += 1
-
-    def pop(self) -> object:
-        if self.is_empty():
-            raise EmptyStackException()
-        else:
-            data = self._top.data
-            self._top = self._top.next
-            self._size -= 1
-
-            return data
+        self._push(data)
