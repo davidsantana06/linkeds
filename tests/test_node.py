@@ -1,8 +1,6 @@
 from pytest import fixture
 from typing import List
 
-from . import *
-
 from src.node import DoubleNode, SingleNode
 
 

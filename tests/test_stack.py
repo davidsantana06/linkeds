@@ -1,8 +1,4 @@
 from pytest import fixture
-from typing import List
-
-from . import *
-
 from src.stack import BoundedStack, DynamicStack
 
 
