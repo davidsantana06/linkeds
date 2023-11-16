@@ -1,7 +1,7 @@
 from pytest import fixture
 from typing import List
 
-from src.node import DoubleNode, SingleNode
+from src.data_structure import DoubleNode, SingleNode
 
 
 NAMES = (
