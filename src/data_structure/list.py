@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+from typing import Iterator
+
 from .node import DoubleNode
 
 
@@ -159,6 +161,27 @@ class List(ABC):
                 self._size -= 1
 
             return data
+        
+    def _reverse(self) -> 'List':
+        reverse_list = self.__class__()
+        node = self._tail
+
+        while node is not None:
+            reverse_list.add_last(node.data)
+            node = node.prev
+
+        return reverse_list
+
+    @abstractmethod
+    def reverse(self) -> 'List':
+        ...
+
+    def __iter__(self) -> Iterator[object]:
+        node = self._head
+
+        while node is not None:
+            yield node.data
+            node = node.next
 
 
 class BoundedList(List):
@@ -187,6 +210,9 @@ class BoundedList(List):
         else:
             self._insert(index, data)
 
+    def reverse(self) -> 'BoundedList':
+        return self._reverse()
+
 
 class DynamicList(List):
     def add_first(self, data: object) -> None:
@@ -197,3 +223,6 @@ class DynamicList(List):
     
     def insert(self, index: int, data: object) -> None:
         self._insert(index, data)
+
+    def reverse(self) -> 'DynamicList':
+        return self._reverse()
