@@ -164,8 +164,8 @@ class LinkedList(ABC):
 
             return data
         
-    def _reverse(self) -> 'List':
-        reverse_list = self.__class__()
+    def _reverse(self, **kwargs) -> 'List':
+        reverse_list = self.__class__(**kwargs)
         node = self._tail
 
         while node is not None:
@@ -226,8 +226,8 @@ class BoundedList(LinkedList, Jsonifier):
             self._insert(index, data)
 
     def reverse(self) -> 'BoundedList':
-        return self._reverse()
-    
+        return self._reverse(capacity=self._capacity)
+
     def assign_iterable(self, iterable: Union[List[object], Tuple[object], Set[object]]) -> None:
         if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
             raise InvalidJsonException()
