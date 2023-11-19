@@ -59,10 +59,10 @@ class Queue(ABC):
 class BoundedQueue(Queue):
     def __init__(self, capacity: int = 10) -> None:
         super().__init__()
-        self.__capacity = capacity
+        self._capacity = capacity
 
     def is_full(self) -> bool:
-        return self._size == self.__capacity
+        return self._size == self._capacity
     
     def enqueue(self, data: object) -> None:
         if self.is_full():

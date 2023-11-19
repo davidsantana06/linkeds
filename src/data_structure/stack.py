@@ -49,10 +49,10 @@ class Stack(ABC):
 class BoundedStack(Stack):
     def __init__(self, capacity: int = 10) -> None:
         super().__init__()
-        self.__capacity = capacity
+        self._capacity = capacity
     
     def is_full(self) -> bool:
-        return self._size == self.__capacity
+        return self._size == self._capacity
     
     def push(self, data: object) -> None:
         if self.is_full():
