@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
-from typing import Iterator
+from typing import Iterator, List, Tuple, Set, Union
 
+from .jsonifier import Jsonifier, InvalidJsonException
 from .node import DoubleNode
 
 
@@ -19,10 +20,11 @@ class IndexListError(IndexError):
         super().__init__(message)
 
 
-class List(ABC):
+class LinkedList(ABC):
+    ASSIGNABLE_ITERABLE_TYPES = (list, tuple, set) 
+
     def __init__(self) -> None:
-        self._head = None
-        self._tail = None
+        self._head = self._tail = None
         self._size = 0
 
     @property
@@ -176,6 +178,19 @@ class List(ABC):
     def reverse(self) -> 'List':
         ...
 
+    @abstractmethod
+    def assign_iterable(self, iterable: Union[List[object], Tuple[object], Set[object]]) -> None:
+        ...
+
+    def to_list(self) -> List[object]:
+        return list(self)
+
+    def to_tuple(self) -> Tuple[object]:
+        return tuple(self)
+
+    def to_set(self) -> Set[object]:
+        return set(self)
+
     def __iter__(self) -> Iterator[object]:
         node = self._head
 
@@ -184,13 +199,13 @@ class List(ABC):
             node = node.next
 
 
-class BoundedList(List):
+class BoundedList(LinkedList, Jsonifier):
     def __init__(self, capacity: int = 10) -> None:
-        super().__init__()
-        self.__capacity = capacity
+        LinkedList.__init__(self)
+        self._capacity = capacity
 
     def is_full(self) -> bool:
-        return self._size == self.__capacity
+        return self._size == self._capacity
     
     def add_first(self, data: object) -> None:
         if self.is_full():
@@ -212,9 +227,32 @@ class BoundedList(List):
 
     def reverse(self) -> 'BoundedList':
         return self._reverse()
+    
+    def assign_iterable(self, iterable: Union[List[object], Tuple[object], Set[object]]) -> None:
+        if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
+            raise InvalidJsonException()
+        else:
+            self._head = self._tail = None
+            self._size = 0
+            self._capacity = len(iterable)
+
+            for item in iterable:
+                self.add_last(item)
+    
+    def load_json(self, file_path: str = None, encoding: str = None) -> None:
+        self.assign_iterable(self._read_json_file(file_path, encoding))
+
+    def loads_json(self, json_str: str) -> None:
+        self.assign_iterable(self._read_json_str(json_str))
+
+    def dump_json(self, file_path: str = None, indent: int = Jsonifier.JSON_INDENT, encoding: str = None) -> None:
+        self._write_json_file(self.to_list(), file_path, indent, encoding)
+
+    def dumps_json(self, indent: int = Jsonifier.JSON_INDENT) -> str:
+        return self._write_json_str(self.to_list(), indent)
 
 
-class DynamicList(List):
+class DynamicList(LinkedList, Jsonifier):
     def add_first(self, data: object) -> None:
         self._add_first(data)
     
@@ -226,3 +264,25 @@ class DynamicList(List):
 
     def reverse(self) -> 'DynamicList':
         return self._reverse()
+    
+    def assign_iterable(self, iterable: Union[List[object], Tuple[object], Set[object]]) -> None:
+        if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
+            raise InvalidJsonException()
+        else:
+            self._head = self._tail = None
+            self._size = 0
+
+            for item in iterable:
+                self.add_last(item)
+    
+    def load_json(self, file_path: str = None, encoding: str = None) -> None:
+        self.assign_iterable(self._read_json_file(file_path, encoding))
+
+    def loads_json(self, json_str: str) -> None:
+        self.assign_iterable(self._read_json_str(json_str))
+
+    def dump_json(self, file_path: str = None, indent: int = Jsonifier.JSON_INDENT, encoding: str = None) -> None:
+        self._write_json_file(self.to_list(), file_path, indent, encoding)
+
+    def dumps_json(self, indent: int = Jsonifier.JSON_INDENT) -> str:
+        return self._write_json_str(self.to_list(), indent)
