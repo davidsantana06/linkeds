@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Iterator, List, Tuple, Set, Union
 
-from .jsonifier import Jsonifier, InvalidJsonException
+from .jsonifier import Jsonifier
 from .node import DoubleNode
 
 
@@ -17,6 +17,11 @@ class FullListException(Exception):
 
 class IndexListError(IndexError):
     def __init__(self, message: str = 'List index out of range') -> None:
+        super().__init__(message)
+
+
+class InvalidIterableAssignmentException(Exception):
+    def __init__(self, message: str = 'Iterable must be a list, tuple or set') -> None:
         super().__init__(message)
 
 
@@ -230,7 +235,7 @@ class BoundedList(LinkedList, Jsonifier):
 
     def assign_iterable(self, iterable: Union[List[object], Tuple[object], Set[object]]) -> None:
         if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
-            raise InvalidJsonException()
+            raise InvalidIterableAssignmentException()
         else:
             self._head = self._tail = None
             self._size = 0
@@ -267,7 +272,7 @@ class DynamicList(LinkedList, Jsonifier):
     
     def assign_iterable(self, iterable: Union[List[object], Tuple[object], Set[object]]) -> None:
         if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
-            raise InvalidJsonException()
+            raise InvalidIterableAssignmentException()
         else:
             self._head = self._tail = None
             self._size = 0
