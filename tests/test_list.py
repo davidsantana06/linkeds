@@ -1,5 +1,5 @@
 from pytest import fixture
-from src.data_structure import BoundedList, DynamicList
+from src.data_structures import BoundedList, DynamicList
 
 
 GAMES = (

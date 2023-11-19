@@ -1,5 +1,5 @@
 from pytest import fixture
-from src.data_structure import BoundedQueue, DynamicQueue
+from src.data_structures import BoundedQueue, DynamicQueue
 
 
 COMPONENTS = (
