@@ -169,7 +169,7 @@ class LinkedList(ABC):
 
             return data
         
-    def _reverse(self, **kwargs) -> 'List':
+    def _reverse(self, **kwargs) -> 'LinkedList':
         reverse_list = self.__class__(**kwargs)
         node = self._tail
 
@@ -180,7 +180,7 @@ class LinkedList(ABC):
         return reverse_list
 
     @abstractmethod
-    def reverse(self) -> 'List':
+    def reverse(self) -> 'LinkedList':
         ...
 
     @abstractmethod

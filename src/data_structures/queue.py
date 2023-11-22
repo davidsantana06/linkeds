@@ -12,7 +12,7 @@ class FullQueueException(Exception):
         super().__init__(message)
 
 
-class Queue(ABC):
+class LinkedQueue(ABC):
     def __init__(self) -> None:
         self._front = self._rear = None
         self._size = 0
@@ -56,7 +56,7 @@ class Queue(ABC):
         return self._front.data if (self._front is not None) else self._front
     
 
-class BoundedQueue(Queue):
+class BoundedQueue(LinkedQueue):
     def __init__(self, capacity: int = 10) -> None:
         super().__init__()
         self._capacity = capacity
@@ -71,6 +71,6 @@ class BoundedQueue(Queue):
             self._enqueue(data)
         
 
-class DynamicQueue(Queue):
+class DynamicQueue(LinkedQueue):
     def enqueue(self, data: object) -> None:
         self._enqueue(data)

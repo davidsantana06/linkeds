@@ -12,7 +12,7 @@ class FullStackException(Exception):
         super().__init__(message)
 
 
-class Stack(ABC):
+class LinkedStack(ABC):
     def __init__(self) -> None:
         self._top = None
         self._size = 0
@@ -46,7 +46,7 @@ class Stack(ABC):
         return self._top.data if (self._top is not None) else self._top
 
 
-class BoundedStack(Stack):
+class BoundedStack(LinkedStack):
     def __init__(self, capacity: int = 10) -> None:
         super().__init__()
         self._capacity = capacity
@@ -61,6 +61,6 @@ class BoundedStack(Stack):
             self._push(data)
 
 
-class DynamicStack(Stack):
+class DynamicStack(LinkedStack):
     def push(self, data: object) -> None:
         self._push(data)
