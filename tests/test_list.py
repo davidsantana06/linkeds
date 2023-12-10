@@ -12,7 +12,7 @@ GAMES = (
     'The Sims', 'Uncharted', 'Valorant', 'World of Warcraft', 'XCOM 2'
 )
 OUTPUT_FOLDER = path.abspath(path.join(path.dirname(__file__), 'output'))
-DYNAMIC_LIST_JSON = path.join(OUTPUT_FOLDER, 'bounded_list.json')
+DYNAMIC_LIST_JSON = path.join(OUTPUT_FOLDER, 'dynamic_list.json')
 
 
 @fixture
