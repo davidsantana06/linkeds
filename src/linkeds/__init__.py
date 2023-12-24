@@ -4,14 +4,20 @@ from .jsonifier import (
 )
 from .list import (
     EmptyListException, FullListException, IndexListError, InvalidIterableAssignmentException,
+    LinkedList,
     BoundedList, DynamicList
 )
-from .node import DoubleNode, SingleNode
+from .node import (
+    Node,
+    DoubleNode, SingleNode
+)
 from .queue import (
     EmptyQueueException, FullQueueException,
+    LinkedQueue,
     BoundedQueue, DynamicQueue
 )
 from .stack import (
     EmptyStackException, FullStackException,
+    LinkedStack,
     BoundedStack, DynamicStack
 )
