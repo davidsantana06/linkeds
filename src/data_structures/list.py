@@ -97,7 +97,8 @@ class LinkedList(ABC):
         '''
         if index < 0 or index > self._size:
             raise IndexListError()
-        elif index == 0:
+        
+        if index == 0:
             self.add_first(data)
         elif index == self._size:
             self.add_last(data)
@@ -137,13 +138,13 @@ class LinkedList(ABC):
         '''
         if index < 0 or index >= self._size:
             raise IndexListError()
-        else:
-            node = self._head
+        
+        node = self._head
 
-            for _ in range(index):
-                node = node.next
+        for _ in range(index):
+            node = node.next
 
-            return node.data
+        return node.data
 
     def remove_first(self) -> object:
         '''
@@ -154,18 +155,18 @@ class LinkedList(ABC):
         '''
         if self.is_empty():
             raise EmptyListException()
+
+        data = self._head.data
+
+        if self._head is self._tail:
+            self._head = self._tail = None
         else:
-            data = self._head.data
+            self._head = self._head.next
+            self._head.prev = None
 
-            if self._head is self._tail:
-                self._head = self._tail = None
-            else:
-                self._head = self._head.next
-                self._head.prev = None
+        self._size -= 1
 
-            self._size -= 1
-
-            return data
+        return data
         
     def remove_last(self) -> object:
         '''
@@ -176,18 +177,18 @@ class LinkedList(ABC):
         '''
         if self.is_empty():
             raise EmptyListException()
+
+        data = self._tail.data
+
+        if self._head is self._tail:
+            self._head = self._tail = None
         else:
-            data = self._tail.data
+            self._tail = self._tail.prev
+            self._tail.next = None
 
-            if self._head is self._tail:
-                self._head = self._tail = None
-            else:
-                self._tail = self._tail.prev
-                self._tail.next = None
+        self._size -= 1
 
-            self._size -= 1
-
-            return data
+        return data
         
     def remove(self, index: int) -> object:
         '''
@@ -201,24 +202,25 @@ class LinkedList(ABC):
             raise EmptyListException()
         elif index < 0 or index >= self._size:
             raise IndexListError()
+
+
+        if index == 0:
+            data = self.remove_first()
+        elif index == self._size - 1:
+            data = self.remove_last()
         else:
-            if index == 0:
-                data = self.remove_first()
-            elif index == self._size - 1:
-                data = self.remove_last()
-            else:
-                node = self._head
+            node = self._head
 
-                for _ in range(index):
-                    node = node.next
+            for _ in range(index):
+                node = node.next
 
-                data = node.data
-                node.prev.next = node.next
-                node.next.prev = node.prev
+            data = node.data
+            node.prev.next = node.next
+            node.next.prev = node.prev
 
-                self._size -= 1
+            self._size -= 1
 
-            return data
+        return data
         
     def _reverse(self, **kwargs) -> 'LinkedList':
         '''Internal method to create and return a new reversed linked list.'''
@@ -288,8 +290,8 @@ class BoundedList(LinkedList, Jsonifier):
         '''
         if self.is_full():
             raise FullListException()
-        else:
-            self._add_first(data)
+
+        self._add_first(data)
 
     def add_last(self, data: object) -> None:
         '''
@@ -300,8 +302,8 @@ class BoundedList(LinkedList, Jsonifier):
         '''
         if self.is_full():
             raise FullListException()
-        else:
-            self._add_last(data)
+
+        self._add_last(data)
 
     def insert(self, index: int, data: object) -> None:
         '''
@@ -312,8 +314,8 @@ class BoundedList(LinkedList, Jsonifier):
         '''
         if self.is_full():
             raise FullListException()
-        else:
-            self._insert(index, data)
+
+        self._insert(index, data)
 
     def reverse(self) -> 'BoundedList':
         '''Creates and returns a new reversed bounded linked list.'''
@@ -328,13 +330,13 @@ class BoundedList(LinkedList, Jsonifier):
         '''
         if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
             raise InvalidIterableAssignmentException()
-        else:
-            self._head = self._tail = None
-            self._size = 0
-            self._capacity = len(iterable)
 
-            for item in iterable:
-                self.add_last(item)
+        self._head = self._tail = None
+        self._size = 0
+        self._capacity = len(iterable)
+
+        for item in iterable:
+            self.add_last(item)
     
     def load_json(self, file_path: str = None, encoding: str = None) -> None:
         '''Loads data from a JSON file into the linked list.'''
@@ -381,12 +383,12 @@ class DynamicList(LinkedList, Jsonifier):
         '''
         if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
             raise InvalidIterableAssignmentException()
-        else:
-            self._head = self._tail = None
-            self._size = 0
 
-            for item in iterable:
-                self.add_last(item)
+        self._head = self._tail = None
+        self._size = 0
+
+        for item in iterable:
+            self.add_last(item)
     
     def load_json(self, file_path: str = None, encoding: str = None) -> None:
         '''Loads data from a JSON file into the linked list.'''

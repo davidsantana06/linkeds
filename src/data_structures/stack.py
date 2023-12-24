@@ -52,12 +52,12 @@ class LinkedStack(ABC):
         '''
         if self.is_empty():
             raise EmptyStackException()
-        else:
-            data = self._top.data
-            self._top = self._top.next
-            self._size -= 1
 
-            return data
+        data = self._top.data
+        self._top = self._top.next
+        self._size -= 1
+
+        return data
 
     def peek(self) -> object:
         '''
@@ -95,8 +95,8 @@ class BoundedStack(LinkedStack):
         '''
         if self.is_full():
             raise FullStackException()
-        else:
-            self._push(data)
+
+        self._push(data)
 
 
 class DynamicStack(LinkedStack):

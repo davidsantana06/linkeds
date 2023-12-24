@@ -59,15 +59,15 @@ class LinkedQueue(ABC):
         '''
         if self.is_empty():
             raise EmptyQueueException()
-        else:
-            data = self._front.data
-            self._front = self._front.next
-            self._size -= 1
 
-            if self.is_empty():
-                self._rear = None
+        data = self._front.data
+        self._front = self._front.next
+        self._size -= 1
 
-            return data
+        if self.is_empty():
+            self._rear = None
+
+        return data
 
     def peek(self) -> object:
         '''
@@ -105,8 +105,8 @@ class BoundedQueue(LinkedQueue):
         '''
         if self.is_full():
             raise FullQueueException()
-        else:
-            self._enqueue(data)
+
+        self._enqueue(data)
         
 
 class DynamicQueue(LinkedQueue):
