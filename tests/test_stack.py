@@ -1,5 +1,5 @@
 from pytest import fixture
-from src.linkeds import BoundedStack, DynamicStack
+from linkeds import BoundedStack, DynamicStack
 
 
 PROCESSES = (

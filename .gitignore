@@ -1,4 +1,7 @@
 .venv/
 __pycache__/
 __secret__.py
+setup.py
+dist/
+*.egg-info/
 *.json

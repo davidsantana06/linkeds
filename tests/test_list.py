@@ -2,7 +2,7 @@ from os import path, mkdir
 from pytest import fixture
 import json
 
-from src.linkeds import BoundedList, DynamicList
+from linkeds import BoundedList, DynamicList
 
 
 GAMES = (

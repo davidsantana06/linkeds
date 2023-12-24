@@ -1,7 +1,7 @@
 from pytest import fixture
 from typing import List
 
-from src.linkeds import DoubleNode, SingleNode
+from linkeds import DoubleNode, SingleNode
 
 
 NAMES = (
