@@ -2,14 +2,14 @@ from abc import ABC, abstractmethod
 from .node import SingleNode
 
 
-class EmptyStackException(Exception):
+class EmptyStack(Exception):
     '''Exception raised for attempting operations on an empty stack.'''
 
     def __init__(self, message: str = 'Stack is empty') -> None:
         super().__init__(message)
 
 
-class FullStackException(Exception):
+class FullStack(Exception):
     '''Exception raised for attempting to push into a full stack.'''
 
     def __init__(self, message: str = 'Stack is full') -> None:
@@ -48,15 +48,14 @@ class LinkedStack(ABC):
         Removes and returns the top element from the stack.
 
         Raises:
-            EmptyStackException: If the stack is empty.
+            EmptyStack: If the stack is empty.
         '''
         if self.is_empty():
-            raise EmptyStackException()
+            raise EmptyStack()
 
         data = self._top.data
         self._top = self._top.next
         self._size -= 1
-
         return data
 
     def peek(self) -> object:
@@ -91,10 +90,10 @@ class BoundedStack(LinkedStack):
         Pushes data onto the stack.
 
         Raises:
-            FullStackException: If the stack is full.
+            FullStack: If the stack is full.
         '''
         if self.is_full():
-            raise FullStackException()
+            raise FullStack()
 
         self._push(data)
 

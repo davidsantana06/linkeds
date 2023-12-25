@@ -3,7 +3,7 @@ from os import path, getcwd
 import json
 
 
-class InvalidJsonException(Exception):
+class InvalidJson(Exception):
     '''Exception raised for invalid JSON.'''
 
     def __init__(self, message: str = 'Invalid JSON') -> None:

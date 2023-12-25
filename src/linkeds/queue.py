@@ -2,14 +2,14 @@ from abc import ABC, abstractmethod
 from .node import SingleNode
 
 
-class EmptyQueueException(Exception):
+class EmptyQueue(Exception):
     '''Exception raised for attempting operations on an empty queue.'''
 
     def __init__(self, message: str = 'Queue is empty') -> None:
         super().__init__(message)
 
 
-class FullQueueException(Exception):
+class FullQueue(Exception):
     '''Exception raised for attempting to enqueue into a full queue.'''
 
     def __init__(self, message: str = 'Queue is full') -> None:
@@ -36,13 +36,11 @@ class LinkedQueue(ABC):
     def _enqueue(self, data: object) -> None:
         '''Internal method to enqueue a new node with the given data.'''
         node = SingleNode(data)
-
         if self.is_empty():
             self._front = self._rear = node
         else:
             self._rear.next = node
             self._rear = node
-
         self._size += 1
 
     @abstractmethod
@@ -55,18 +53,16 @@ class LinkedQueue(ABC):
         Removes and returns the front element from the queue.
         
         Raises:
-            EmptyQueueException: If the queue is empty.
+            EmptyQueue: If the queue is empty.
         '''
         if self.is_empty():
-            raise EmptyQueueException()
+            raise EmptyQueue()
 
         data = self._front.data
         self._front = self._front.next
         self._size -= 1
-
         if self.is_empty():
             self._rear = None
-
         return data
 
     def peek(self) -> object:
@@ -101,13 +97,13 @@ class BoundedQueue(LinkedQueue):
         Enqueues data into the queue.
 
         Raises:
-            FullQueueException: If the queue is full.
+            FullQueue: If the queue is full.
         '''
         if self.is_full():
-            raise FullQueueException()
+            raise FullQueue()
 
         self._enqueue(data)
-        
+
 
 class DynamicQueue(LinkedQueue):
     '''Class representing a dynamic (unbounded) queue.'''

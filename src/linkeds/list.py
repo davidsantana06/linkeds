@@ -5,14 +5,14 @@ from .jsonifier import Jsonifier
 from .node import DoubleNode
 
 
-class EmptyListException(Exception):
+class EmptyList(Exception):
     '''Exception raised for attempting operations on an empty linked list.'''
 
     def __init__(self, message: str = 'List is empty') -> None:
         super().__init__(message)
 
 
-class FullListException(Exception):
+class FullList(Exception):
     '''Exception raised for attempting operations on a full linked list.'''
 
     def __init__(self, message: str = 'List is full') -> None:
@@ -26,7 +26,7 @@ class IndexListError(IndexError):
         super().__init__(message)
 
 
-class InvalidIterableAssignmentException(Exception):
+class InvalidIterableAssignment(Exception):
     '''Exception raised for invalid iterable assignments to a linked list.'''
 
     def __init__(self, message: str = 'Iterable must be a list, tuple, or set') -> None:
@@ -34,7 +34,7 @@ class InvalidIterableAssignmentException(Exception):
 
 
 class LinkedList(ABC):
-    '''Abstract base class for a doubly linked list.'''
+    '''Abstract base class for a linked list.'''
 
     ASSIGNABLE_ITERABLE_TYPES = (list, tuple, set)
 
@@ -55,14 +55,12 @@ class LinkedList(ABC):
     def _add_first(self, data: object) -> None:
         '''Internal method to add a new node with the given data to the beginning of the list.'''
         node = DoubleNode(data)
-
         if self.is_empty():
             self._head = self._tail = node
         else:
             node.next = self._head
             self._head.prev = node
             self._head = node
-
         self._size += 1
 
     @abstractmethod
@@ -73,14 +71,12 @@ class LinkedList(ABC):
     def _add_last(self, data: object) -> None:
         '''Internal method to add a new node with the given data to the end of the list.'''
         node = DoubleNode(data)
-
         if self.is_empty():
             self._head = self._tail = node
         else:
             node.prev = self._tail
             self._tail.next = node
             self._tail = node
-
         self._size += 1
 
     @abstractmethod
@@ -105,15 +101,12 @@ class LinkedList(ABC):
         else:
             node = DoubleNode(data)
             current = self._head
-
             for _ in range(index):
                 current = current.next
-
             node.next = current
             node.prev = current.prev
             current.prev.next = node
             current.prev = node
-
             self._size += 1
 
     @abstractmethod
@@ -140,10 +133,8 @@ class LinkedList(ABC):
             raise IndexListError()
         
         node = self._head
-
         for _ in range(index):
             node = node.next
-
         return node.data
 
     def remove_first(self) -> object:
@@ -151,21 +142,18 @@ class LinkedList(ABC):
         Removes and returns the data of the first element in the list.
 
         Raises:
-            EmptyListException: If the list is empty.
+            EmptyList: If the list is empty.
         '''
         if self.is_empty():
-            raise EmptyListException()
+            raise EmptyList()
 
         data = self._head.data
-
         if self._head is self._tail:
             self._head = self._tail = None
         else:
             self._head = self._head.next
             self._head.prev = None
-
         self._size -= 1
-
         return data
         
     def remove_last(self) -> object:
@@ -173,21 +161,18 @@ class LinkedList(ABC):
         Removes and returns the data of the last element in the list.
 
         Raises:
-            EmptyListException: If the list is empty.
+            EmptyList: If the list is empty.
         '''
         if self.is_empty():
-            raise EmptyListException()
+            raise EmptyList()
 
         data = self._tail.data
-
         if self._head is self._tail:
             self._head = self._tail = None
         else:
             self._tail = self._tail.prev
             self._tail.next = None
-
         self._size -= 1
-
         return data
         
     def remove(self, index: int) -> object:
@@ -195,14 +180,13 @@ class LinkedList(ABC):
         Removes and returns the data of the element at the specified index.
 
         Raises:
-            EmptyListException: If the list is empty.
+            EmptyList: If the list is empty.
             IndexListError: If the index is out of range.
         '''
         if self.is_empty():
-            raise EmptyListException()
+            raise EmptyList()
         elif index < 0 or index >= self._size:
             raise IndexListError()
-
 
         if index == 0:
             data = self.remove_first()
@@ -210,27 +194,21 @@ class LinkedList(ABC):
             data = self.remove_last()
         else:
             node = self._head
-
             for _ in range(index):
                 node = node.next
-
             data = node.data
             node.prev.next = node.next
             node.next.prev = node.prev
-
             self._size -= 1
-
         return data
         
     def _reverse(self, **kwargs) -> 'LinkedList':
         '''Internal method to create and return a new reversed linked list.'''
         reverse_list = self.__class__(**kwargs)
         node = self._tail
-
         while node is not None:
             reverse_list.add_last(node.data)
             node = node.prev
-
         return reverse_list
 
     @abstractmethod
@@ -258,7 +236,6 @@ class LinkedList(ABC):
     def __iter__(self) -> Iterator[object]:
         '''Iterator method to allow iterating through the elements of the linked list.'''
         node = self._head
-
         while node is not None:
             yield node.data
             node = node.next
@@ -286,10 +263,10 @@ class BoundedList(LinkedList, Jsonifier):
         Adds data to the beginning of the list.
 
         Raises:
-            FullListException: If the list is full.
+            FullList: If the list is full.
         '''
         if self.is_full():
-            raise FullListException()
+            raise FullList()
 
         self._add_first(data)
 
@@ -298,10 +275,10 @@ class BoundedList(LinkedList, Jsonifier):
         Adds data to the end of the list.
 
         Raises:
-            FullListException: If the list is full.
+            FullList: If the list is full.
         '''
         if self.is_full():
-            raise FullListException()
+            raise FullList()
 
         self._add_last(data)
 
@@ -310,10 +287,10 @@ class BoundedList(LinkedList, Jsonifier):
         Inserts data at the specified index.
 
         Raises:
-            FullListException: If the list is full.
+            FullList: If the list is full.
         '''
         if self.is_full():
-            raise FullListException()
+            raise FullList()
 
         self._insert(index, data)
 
@@ -326,15 +303,14 @@ class BoundedList(LinkedList, Jsonifier):
         Assigns data from an iterable to the linked list.
 
         Raises:
-            InvalidIterableAssignmentException: If the iterable type is not supported.
+            InvalidIterableAssignment: If the iterable type is not supported.
         '''
         if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
-            raise InvalidIterableAssignmentException()
+            raise InvalidIterableAssignment()
 
         self._head = self._tail = None
         self._size = 0
         self._capacity = len(iterable)
-
         for item in iterable:
             self.add_last(item)
     
@@ -379,14 +355,13 @@ class DynamicList(LinkedList, Jsonifier):
         Assigns data from an iterable to the linked list.
 
         Raises:
-            InvalidIterableAssignmentException: If the iterable type is not supported.
+            InvalidIterableAssignment: If the iterable type is not supported.
         '''
         if type(iterable) not in self.ASSIGNABLE_ITERABLE_TYPES:
-            raise InvalidIterableAssignmentException()
+            raise InvalidIterableAssignment()
 
         self._head = self._tail = None
         self._size = 0
-
         for item in iterable:
             self.add_last(item)
     

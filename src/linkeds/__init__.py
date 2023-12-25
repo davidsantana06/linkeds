@@ -1,9 +1,9 @@
 from .jsonifier import (
-    InvalidJsonException,
+    InvalidJson,
     Jsonifier
 )
 from .list import (
-    EmptyListException, FullListException, IndexListError, InvalidIterableAssignmentException,
+    EmptyList, FullList, IndexListError, InvalidIterableAssignment,
     LinkedList,
     BoundedList, DynamicList
 )
@@ -12,12 +12,12 @@ from .node import (
     DoubleNode, SingleNode
 )
 from .queue import (
-    EmptyQueueException, FullQueueException,
+    EmptyQueue, FullQueue,
     LinkedQueue,
     BoundedQueue, DynamicQueue
 )
 from .stack import (
-    EmptyStackException, FullStackException,
+    EmptyStack, FullStack,
     LinkedStack,
     BoundedStack, DynamicStack
 )
